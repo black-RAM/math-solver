@@ -12,18 +12,13 @@ function operate(str) {
     '**': (a, b) => Math.pow(a, b)
   };
 
-  // Check if the operator exists in the mapping
-  if (operators.hasOwnProperty(o)) {
-    // Get the corresponding function for the operator
-    const operatorFunc = operators[o];
+  // Get the corresponding function for the operator
+  const operatorFunc = operators[o];
 
-    // Apply the operator function to the numbers
-    let ans = operatorFunc(Number(x), Number(y));
-    
-    return ans;
-  } else {
-    throw new Error(`Unsupported operator: ${o}`);
-  }
+  // Apply the operator function to the numbers
+  let ans = operatorFunc(+x, +y);
+  
+  return ans;
 }
 
 // Example usage
