@@ -4,35 +4,41 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Calculator</title>
+  <title>Calculator</title>
 
   <link rel="stylesheet" href="style.css">
   <script src="script.js"></script>
+
+  <!-- Roboto font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">  
 </head>
 <body>
   <main id="calc">
     <div id="display">
-      4+5
+      <div id="up-display">4+</div>
+      <div id="main-display">5</div>
     </div>
 
     <div id="container">
       <div id="col-1">
-        <button type="button">1</button>
-        <button type="button">2</button>
-        <button type="button">3</button>
-        <button type="button">4</button>
-        <button type="button">5</button>
-        <button type="button">6</button>
-        <button type="button">7</button>
-        <button type="button">8</button>
-        <button type="button">9</button>
-        <button type="button">0</button>
-        <button type="button">.</button>
-        <button type="button" id="PI">π</button>
-
         <button type="button" id="exp">^</button>
-      <button type="button" id="clear-all">AC</button>
-      <button type="button" id="clear">C</button>
+        <button type="button" id="clear-all">AC</button>
+        <button type="button" id="clear">C</button>
+
+        <button type="button" class="num">7</button>
+        <button type="button" class="num">8</button>
+        <button type="button" class="num">9</button>
+        <button type="button" class="num">4</button>
+        <button type="button" class="num">5</button>
+        <button type="button" class="num">6</button>
+        <button type="button" class="num">1</button>
+        <button type="button" class="num">2</button>
+        <button type="button" class="num">3</button>
+        <button type="button" class="num">0</button>
+        <button type="button" class="num">.</button>
+        <button type="button" class="num" id="PI">π</button>
       </div>
   
       <div id="col-2">
