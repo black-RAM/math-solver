@@ -1,7 +1,8 @@
-function operate(str) {
-  const [x, o, y] = 
-    str.split(' ') // split string
-    .map(part => part.trim()) //remove whitespace;
+function operate(input) {
+  const x = parseFloat(input.match(/(\d+)/));
+  const o = input.match(/[+x÷^-]/)[0];
+  const y = parseFloat(input.match(/(?<=[+\-x÷^])\d+/));
+  console.log(x,o,y);
 
   // Define the mapping of operators to functions
   const operators = {
@@ -9,7 +10,7 @@ function operate(str) {
     '-': (a, b) => a - b,
     '*': (a, b) => a * b,
     '/': (a, b) => a / b,
-    '**': (a, b) => Math.pow(a, b)
+    '^': (a, b) => Math.pow(a, b)
   };
 
   // Get the corresponding function for the operator
@@ -25,10 +26,9 @@ function operate(str) {
 const displayA = document.getElementById('main-display');
 const displayB = document.getElementById('up-display');
 
-const nums = [...document.getElementsByClassName('num')]; // number buttons
-const ops = [...document.getElementsByClassName('o')]; // operator buttons
-
-const toDisplay = [...nums, ...ops];
+const toDisplay = [
+  ...document.getElementsByClassName('num'),
+  ...document.getElementsByClassName('o')];
 
 let onDisplay = [];
 
@@ -38,7 +38,7 @@ toDisplay.forEach((button) => {
     let char = button.innerText;
     onDisplay.push(char);
     
-    let isOp = /[+\-×÷=]/.test(char);
+    let isOp = /[+\-x÷=]/.test(char);
 
     if(!isOp) {
       displayA.innerText += char;
@@ -46,5 +46,15 @@ toDisplay.forEach((button) => {
       displayB.innerText = onDisplay.join('');
       displayA.innerText = "";
     }
+
+    console.log(onDisplay);
   });
 });
+
+// evaluate when = clicked
+document.getElementById('equals').addEventListener('click', () => {
+  console.log(
+    operate(onDisplay.join(''))
+  )
+  onDisplay = [];
+})
