@@ -7,7 +7,6 @@
   <title>Calculator</title>
 
   <link rel="stylesheet" href="style.css">
-  <script src="script.js"></script>
 
   <!-- Roboto font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,13 +16,13 @@
 <body>
   <main id="calc">
     <div id="display">
-      <div id="up-display">4+</div>
-      <div id="main-display">5</div>
+      <div id="up-display"></div>
+      <div id="main-display"></div>
     </div>
 
     <div id="container">
       <div id="col-1">
-        <button type="button" id="exp">^</button>
+        <button type="button" class="o" id="exp">^</button>
         <button type="button" id="clear-all">AC</button>
         <button type="button" id="clear">C</button>
 
@@ -42,13 +41,15 @@
       </div>
   
       <div id="col-2">
-        <button type="button" id="add">+</button>
-        <button type="button" id="minus">-</button>
-        <button type="button" id="multiply">×</button>
-        <button type="button" id="divide">÷</button>
-        <button type="button" id="equals">=</button>
+        <button type="button" class="o" id="add">+</button>
+        <button type="button" class="o" id="minus">-</button>
+        <button type="button" class="o" id="multiply">×</button>
+        <button type="button" class="o" id="divide">÷</button>
+        <button type="button" class="o" id="equals">=</button>
       </div>
     </div>
   </main>
+
+  <script src="script.js"></script>
 </body>
 </html>

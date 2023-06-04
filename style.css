@@ -46,6 +46,7 @@ body {
   background-color: #fff;
   padding: 10px;
   border-radius: 5px;
+  min-height: 70px;
   text-align: right;
 }
 #up-display {

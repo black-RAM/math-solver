@@ -21,9 +21,30 @@ function operate(str) {
   return ans;
 }
 
-// Example usage
-console.log(operate('3 + 5')); // Output: 8
-console.log(operate('6 * 2')); // Output: 12
-console.log(operate('10 - 4')); // Output: 6
-console.log(operate('9 / 3')); // Output: 3
-console.log(operate('2 ** 4')); // Output: 16
+// populate display
+const displayA = document.getElementById('main-display');
+const displayB = document.getElementById('up-display');
+
+const nums = [...document.getElementsByClassName('num')]; // number buttons
+const ops = [...document.getElementsByClassName('o')]; // operator buttons
+
+const toDisplay = [...nums, ...ops];
+
+let onDisplay = [];
+
+toDisplay.forEach((button) => {
+
+  button.addEventListener('click', () => {
+    let char = button.innerText;
+    onDisplay.push(char);
+    
+    let isOp = /[+\-×÷=]/.test(char);
+
+    if(!isOp) {
+      displayA.innerText += char;
+    } else {
+      displayB.innerText = onDisplay.join('');
+      displayA.innerText = "";
+    }
+  });
+});
