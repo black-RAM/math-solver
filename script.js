@@ -1,25 +1,22 @@
 function operate(input) {
-  const x = parseFloat(input.match(/(\d+)/));
-  const o = input.match(/[+x÷^-]/)[0];
-  const y = parseFloat(input.match(/(?<=[+\-x÷^])\d+/));
-  console.log(x,o,y);
+  const x = parseFloat(input.match(/(\d+)/)); // match first number
+  const o = input.match(/[+x÷^-]/)[0]; // match operator
+  const y = parseFloat(input.match(/(?<=[+\-x÷^])\d+/)); // match number after operator
 
   // Define the mapping of operators to functions
   const operators = {
     '+': (a, b) => a + b,
     '-': (a, b) => a - b,
-    '*': (a, b) => a * b,
-    '/': (a, b) => a / b,
+    'x': (a, b) => a * b,
+    '÷': (a, b) => a / b,
     '^': (a, b) => Math.pow(a, b)
   };
 
-  // Get the corresponding function for the operator
-  const operatorFunc = operators[o];
+  const operatorFunc = operators[o]; // access function for operator
 
-  // Apply the operator function to the numbers
-  let ans = operatorFunc(+x, +y);
-  
-  return ans;
+  let ans = operatorFunc(+x, +y);// pass numbers as function parameters
+
+  return ans; // return result
 }
 
 // populate display
@@ -28,7 +25,8 @@ const displayB = document.getElementById('up-display');
 
 const toDisplay = [
   ...document.getElementsByClassName('num'),
-  ...document.getElementsByClassName('o')];
+  ...document.getElementsByClassName('o')
+];
 
 let onDisplay = [];
 
@@ -40,21 +38,17 @@ toDisplay.forEach((button) => {
     
     let isOp = /[+\-x÷=]/.test(char);
 
-    if(!isOp) {
-      displayA.innerText += char;
-    } else {
+    if(isOp) {
       displayB.innerText = onDisplay.join('');
       displayA.innerText = "";
+    } else {
+      displayA.innerText += char;
     }
-
-    console.log(onDisplay);
   });
 });
 
 // evaluate when = clicked
 document.getElementById('equals').addEventListener('click', () => {
-  console.log(
-    operate(onDisplay.join(''))
-  )
+  operate(onDisplay.join(''))
   onDisplay = [];
 })
