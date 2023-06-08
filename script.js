@@ -1,7 +1,5 @@
 function operate(input) {
-  const x = parseFloat(input.match(/(\d+)/)); // match first number
-  const o = input.match(/[+x÷^-]/)[0]; // match operator
-  const y = parseFloat(input.match(/(?<=[+\-x÷^])\d+/)); // match number after operator
+  const [x, o, y] = input.match(/(\d+)([+x÷^-])(\d+)/).slice(1);
   // mapping of operators to functions
   const operators = {
     '+': (a, b) => a + b,
@@ -23,36 +21,54 @@ const toDisplay = [
   ...document.getElementsByClassName('o')
 ];
 
+// populate the display
 let onDisplay = "";
 let opNum = 0;
+let char = "";
+let currentDisplay = displayA;
 
 toDisplay.forEach((button) => {
 
   button.addEventListener('click', () => {
-    let char = button.innerText;
+    char = button.innerText;
     onDisplay+=char;
 
     if(/[+x÷^=-]/.test(char)) {
+      currentDisplay = displayB;
       displayB.innerText = onDisplay;
       displayA.innerText = "";
       opNum++;
     } else {
+      currentDisplay = displayA;
       displayA.innerText += char;
     };
     
     // evaluate
     if(opNum > 1) {
       let result = operate(onDisplay);
-      displayA.innerText = result;
       if(char === "=") {
         onDisplay = [result];
         opNum = 0;
+        displayA.innerText = onDisplay;
       } else {
         onDisplay = [result, char].join("");
         opNum = 1;
         displayB.innerText = onDisplay;
-        displayA.innerText = "";
       }
     }
   });
 });
+// clear buttons
+const clears = [
+  document.getElementById('C'),
+  document.getElementById('AC')
+]
+clears[0].addEventListener('click', () => {
+  onDisplay = onDisplay.slice(0, -1);
+  currentDisplay.innerText = onDisplay;
+}); // backspace
+clears[1].addEventListener('click', () => {
+  onDisplay = '';
+  displayA.innerText = '';
+  displayB.innerText ='';
+}); // clear all
