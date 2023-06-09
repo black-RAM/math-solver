@@ -1,5 +1,7 @@
 function operate(input) {
-  const [x, o, y] = input.match(/(\d+)([+x÷^-])(\d+)/).slice(1);
+  input = input.split(" ");
+  input.splice(-2);
+  const [x, o, y] = input;
   // mapping of operators to functions
   const operators = {
     '+': (a, b) => a + b,
@@ -9,8 +11,10 @@ function operate(input) {
     '^': (a, b) => Math.pow(a, b)
   };
   const operatorFunc = operators[o]; // access function for operator
+
   let ans = operatorFunc(+x, +y);// pass numbers as function parameters
-  return ans; // return result
+
+  return ans; // return result, correct to 10 d.p.
 }
 
 // DOM reference to calc displays and clickable buttons
@@ -31,14 +35,15 @@ toDisplay.forEach((button) => {
 
   button.addEventListener('click', () => {
     char = button.innerText;
-    onDisplay+=char;
 
     if(/[+x÷^=-]/.test(char)) {
       currentDisplay = displayB;
+      onDisplay+=` ${char} `;
       displayB.innerText = onDisplay;
       displayA.innerText = "";
       opNum++;
     } else {
+      onDisplay+=char;
       currentDisplay = displayA;
       displayA.innerText += char;
     };
