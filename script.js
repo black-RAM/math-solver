@@ -35,32 +35,32 @@ const toDisplay = [
 
 // populate the display
 let onDisplay = "";
+let currentDisplay = displayA;
 let opNum = 0;
 let char = "";
-let currentDisplay = displayA;
 
 toDisplay.forEach((button) => {
 
   button.addEventListener('click', () => {
     char = button.innerText;
 
-    if(/[+x÷^=-]/.test(char)) {
+    if(/[+x÷^=-]/.test(char)) { // if character is an operator
       currentDisplay = displayB;
       onDisplay+=` ${char} `;
       displayB.innerText = onDisplay;
       displayA.innerText = "";
       opNum++;
     } else {
-      onDisplay+=char;
       currentDisplay = displayA;
+      onDisplay+=char;
       displayA.innerText += char;
     };
     
-    // evaluate
+    // evaluate, if more than 1 operator
     if(opNum > 1) {
       let result = operate(onDisplay);
       if(char === "=") {
-        onDisplay = [result];
+        onDisplay = result;
         opNum = 0;
         displayA.innerText = onDisplay;
       } else {
@@ -69,8 +69,18 @@ toDisplay.forEach((button) => {
         displayB.innerText = onDisplay;
       }
     }
+
+    // edge case: user clicks number then equals
+    document.getElementById('equals').addEventListener('click', () => {
+      if(opNum < 2) {
+        onDisplay = onDisplay.match(/\d+/);
+        displayA.innerText = onDisplay;
+        opNum = 0;
+      }
+    })
   });
 });
+
 // clear buttons
 const clears = [
   document.getElementById('C'),
