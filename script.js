@@ -2,6 +2,7 @@ function operate(input) {
   input = input.split(" ");
   input.splice(-2);
   const [x, o, y] = input;
+
   // mapping of operators to functions
   const operators = {
     '+': (a, b) => a + b,
@@ -12,9 +13,16 @@ function operate(input) {
   };
   const operatorFunc = operators[o]; // access function for operator
 
-  let ans = operatorFunc(+x, +y);// pass numbers as function parameters
+  let ans = operatorFunc(parseFloat(x), parseFloat(y));// pass numbers as function parameters
 
-  return ans; // return result, correct to 10 d.p.
+  // turns ans into a string, match digits after "."
+  decimals = JSON.stringify(ans).match(/(?<=\.)\d+/);
+  if(decimals === null) decimals = [];
+
+  // round to ten d.p.
+  if(decimals.length > 10) ans = ans.toFixed(10);
+
+  return ans; // return result
 }
 
 // DOM reference to calc displays and clickable buttons
