@@ -46,11 +46,12 @@ body {
   background-color: #fff;
   padding: 10px;
   border-radius: 5px;
-  min-height: 70px;
+  min-height: 60px;
   text-align: right;
 }
 #up-display {
   font-size: 0.6em;
+  min-height: 1em;
 }
 #container {
   display: flex;

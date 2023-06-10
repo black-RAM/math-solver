@@ -118,6 +118,20 @@ document.addEventListener('keydown', (event) => {
 function handleKeyPress(key) {
   // Check if the key is a number
   if (/^\d$/.test(key)) {
+    appendNum();
+  }
+
+  // Check if the key is the decimal point (.)
+  if (key === '.') {
+    // prevent multiple decimals
+    const lastOperand = onDisplay.split(' ').pop();
+    if (lastOperand.includes('.')) {
+      return;
+    }
+    appendNum();
+  }
+
+  function appendNum() {
     onDisplay += key;
     currentDisplay = displayA;
     currentDisplay.innerText += key;
@@ -132,24 +146,19 @@ function handleKeyPress(key) {
     opNum++;
   };
 
-  // Check if the key is the decimal point (.)
-  if (key === '.') {
-    // prevent multiple decimals
-    const lastOperand = onDisplay.split(' ').pop();
-    if (lastOperand.includes('.')) {
-      return;
-    }
-    onDisplay += key;
-    currentDisplay = displayA;
-    currentDisplay.innerText = onDisplay;
-  }
-
   // Check if the key is the equals sign (=)
   if (key === '=') {
-    let result = operate(onDisplay);
-    onDisplay = result;
-    opNum = 0;
-    displayA.innerText = onDisplay;
+    // in case user pressed equals early
+    if (opNum === 1) {
+      onDisplay = onDisplay.match(/(\d+|\.)/gi).join('');
+      displayA.innerText = onDisplay;
+      opNum = 0;
+    } else if (opNum > 1) {
+      let result = operate(onDisplay);
+      onDisplay = result;
+      opNum = 0;
+      displayA.innerText = onDisplay;
+    }
   }
 
   // Check if the key is the backspace key
