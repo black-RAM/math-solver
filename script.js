@@ -44,16 +44,25 @@ toDisplay.forEach((button) => {
   button.addEventListener('click', () => {
     char = button.innerText;
 
+    // Check if character is a decimal point
+    if (char === '.') {
+      // Check if the current operand already contains a decimal point
+      const lastOperand = onDisplay.split(' ').pop();
+      if (lastOperand.includes('.')) {
+        return; // Skip appending the decimal point
+      }
+    }
+    
     if(/[+x÷^=-]/.test(char)) { // if character is an operator
       currentDisplay = displayB;
       onDisplay+=` ${char} `;
-      displayB.innerText = onDisplay;
+      currentDisplay.innerText = onDisplay;
       displayA.innerText = "";
       opNum++;
     } else {
       currentDisplay = displayA;
       onDisplay+=char;
-      displayA.innerText += char;
+      currentDisplay.innerText += char;
     };
     
     // evaluate, if more than 1 operator
@@ -72,8 +81,8 @@ toDisplay.forEach((button) => {
 
     // edge case: user clicks number then equals
     document.getElementById('equals').addEventListener('click', () => {
-      if(opNum < 2) {
-        onDisplay = onDisplay.match(/\d+/);
+      if(opNum === 1) {
+        onDisplay = onDisplay.match(/(\d+|\.)/gi).join("");
         displayA.innerText = onDisplay;
         opNum = 0;
       }
