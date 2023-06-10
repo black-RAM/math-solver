@@ -94,13 +94,15 @@ function handleKeyPress(key) {
     currentDisplay.innerText += key;
   }
 
-  if (/^[+x÷^=-]$/.test(key)) {
+  if (/^[+*/^=-]$/.test(key)) {
     onDisplay += ` ${key} `;
     currentDisplay = displayB;
     currentDisplay.innerText = onDisplay;
     displayA.innerText = "";
     opNum++;
   }
+  
+  if(key === '/') event.preventDefault(); // for firefox
 
   if (key === '=') {
     if (opNum === 1) {
