@@ -14,8 +14,10 @@ let opNum = 0;
 // Event listener for button clicks
 toDisplay.forEach((button) => {
   button.addEventListener('click', () => {
-    const char = button.innerText;
+    let char = button.innerText;
+    if(char === 'π') char = Math.PI;
 
+    // prevent multiple decimals
     if (char === '.') {
       const lastOperand = onDisplay.split(' ').pop();
       if (lastOperand.includes('.')) {
@@ -23,7 +25,7 @@ toDisplay.forEach((button) => {
       }
     }
 
-    if (/[+x÷^=-]/.test(char)) {
+    if (/[+x÷^=-]/.test(char)) { // if char is operator
       currentDisplay = displayB;
       onDisplay += ` ${char} `;
       currentDisplay.innerText = onDisplay;
@@ -79,6 +81,10 @@ document.addEventListener('keydown', (event) => {
 
 function handleKeyPress(key) {
   if (/^\d$/.test(key) || key === '.') {
+    const lastOperand = onDisplay.split(' ').pop();
+    if (key === '.' && lastOperand.includes('.')) {
+      return; // Skip appending the decimal point
+    }
     appendNum();
   }
 
