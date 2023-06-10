@@ -1,35 +1,4 @@
-function operate(input) {
-  input = input.split(" ");
-  input.splice(-2);
-  const [x, o, y] = input;
-
-  // mapping of operators to functions
-  const operators = {
-    '+': (a, b) => a + b,
-    '-': (a, b) => a - b,
-    '*': (a, b) => a * b,
-    '/': (a, b) => a / b,
-    '^': (a, b) => Math.pow(a, b)
-  };
-  // Add additional keys for certain operators
-  operators['÷'] = operators['/']; 
-  operators['x'] = operators['*'];
-
-  const operatorFunc = operators[o]; // access function for operator
-
-  let ans = operatorFunc(parseFloat(x), parseFloat(y));// pass numbers as function parameters
-
-  // turns ans into a string, match digits after "."
-  decimals = JSON.stringify(ans).match(/(?<=\.)\d+/);
-  if(decimals === null) decimals = [];
-
-  // round to ten d.p.
-  if(decimals.length > 10) ans = ans.toFixed(10);
-
-  return ans; // return result
-}
-
-// DOM reference to calc displays and clickable buttons
+// DOM references
 const displayA = document.getElementById('main-display');
 const displayB = document.getElementById('up-display');
 const toDisplay = [
@@ -37,97 +6,79 @@ const toDisplay = [
   ...document.getElementsByClassName('o')
 ];
 
-// populate the display
+// State variables
 let onDisplay = "";
 let currentDisplay = displayA;
 let opNum = 0;
-let char = "";
 
+// Event listener for button clicks
 toDisplay.forEach((button) => {
-
   button.addEventListener('click', () => {
-    char = button.innerText;
+    const char = button.innerText;
 
-    // Check if character is a decimal point
     if (char === '.') {
-      // Check if the current operand already contains a decimal point
       const lastOperand = onDisplay.split(' ').pop();
       if (lastOperand.includes('.')) {
-        return; // Skip appending the decimal point
+        return;
       }
     }
 
-    if(/[+x÷^=-]/.test(char)) { // if character is an operator
+    if (/[+x÷^=-]/.test(char)) {
       currentDisplay = displayB;
-      onDisplay+=` ${char} `;
+      onDisplay += ` ${char} `;
       currentDisplay.innerText = onDisplay;
       displayA.innerText = "";
       opNum++;
     } else {
       currentDisplay = displayA;
-      onDisplay+=char;
+      onDisplay += char;
       currentDisplay.innerText += char;
-    };
-    
-    // evaluate, if more than 1 operator
-    if(opNum > 1) {
+    }
+
+    if (opNum > 1) {
       let result = operate(onDisplay);
-      if(char === "=") {
+      if (char === "=") {
         onDisplay = result;
         opNum = 0;
         displayA.innerText = onDisplay;
       } else {
-        onDisplay = [result, char].join("");
+        onDisplay = `${result}${char}`;
         opNum = 1;
         displayB.innerText = onDisplay;
       }
     }
-
-    // edge case: user clicks number then equals
-    document.getElementById('equals').addEventListener('click', () => {
-      if(opNum === 1) {
-        onDisplay = onDisplay.match(/(\d+|\.)/gi).join("");
-        displayA.innerText = onDisplay;
-        opNum = 0;
-      }
-    })
   });
 });
 
-// clear buttons
-const clears = [
-  document.getElementById('C'),
-  document.getElementById('AC')
-]
-clears[0].addEventListener('click', () => {
+// Event listener for equals button click
+document.getElementById('equals').addEventListener('click', () => {
+  if (opNum === 1) {
+    onDisplay = onDisplay.match(/(\d+|\.)/gi).join("");
+    displayA.innerText = onDisplay;
+    opNum = 0;
+  }
+});
+
+// Event listeners for clear buttons
+document.getElementById('C').addEventListener('click', () => {
   onDisplay = onDisplay.slice(0, -1);
   currentDisplay.innerText = onDisplay;
 }); // backspace
-clears[1].addEventListener('click', () => {
+
+document.getElementById('AC').addEventListener('click', () => {
   onDisplay = '';
   displayA.innerText = '';
-  displayB.innerText ='';
+  displayB.innerText = '';
 }); // clear all
 
-// Keyboard functionality
+// Event listener for keyboard input
 document.addEventListener('keydown', (event) => {
   const key = event.key;
   handleKeyPress(key);
 });
 
 function handleKeyPress(key) {
-  // Check if the key is a number
-  if (/^\d$/.test(key)) {
-    appendNum();
-  }
-
-  // Check if the key is the decimal point (.)
-  if (key === '.') {
-    // prevent multiple decimals
-    const lastOperand = onDisplay.split(' ').pop();
-    if (lastOperand.includes('.')) {
-      return;
-    }
+  if (/^\d$/.test(key) || key === '.') {
     appendNum();
   }
 
@@ -137,18 +88,15 @@ function handleKeyPress(key) {
     currentDisplay.innerText += key;
   }
 
-  // if key is an operator
-  if(/^[+x÷^=-]$/.test(key)) {
-    onDisplay+=` ${key} `;
+  if (/^[+x÷^=-]$/.test(key)) {
+    onDisplay += ` ${key} `;
     currentDisplay = displayB;
     currentDisplay.innerText = onDisplay;
     displayA.innerText = "";
     opNum++;
-  };
+  }
 
-  // Check if the key is the equals sign (=)
   if (key === '=') {
-    // in case user pressed equals early
     if (opNum === 1) {
       onDisplay = onDisplay.match(/(\d+|\.)/gi).join('');
       displayA.innerText = onDisplay;
@@ -161,17 +109,42 @@ function handleKeyPress(key) {
     }
   }
 
-  // Check if the key is the backspace key
   if (key === 'Backspace') {
     onDisplay = onDisplay.slice(0, -1);
     currentDisplay.innerText = onDisplay;
   }
 
-  // Check if the key is the Escape key (clear all)
   if (key === 'Escape') {
     onDisplay = '';
     displayA.innerText = '';
     displayB.innerText = '';
     opNum = 0;
   }
+}
+
+// Calculator operations
+function operate(input) {
+  input = input.split(" ");
+  input.splice(-2);
+  const [x, o, y] = input;
+
+  const operators = {
+    '+': (a, b) => a + b,
+    '-': (a, b) => a - b,
+    '*': (a, b) => a * b,
+    '/': (a, b) => a / b,
+    '^': (a, b) => Math.pow(a, b),
+    '÷': (a, b) => a / b,
+    'x': (a, b) => a * b
+  };
+
+  const operatorFunc = operators[o];
+  let ans = operatorFunc(parseFloat(x), parseFloat(y));
+
+  const decimals = JSON.stringify(ans).match(/(?<=\.)\d+/) || [];
+  if (decimals.length > 10) {
+    ans = ans.toFixed(10);
+  }
+
+  return ans;
 }
