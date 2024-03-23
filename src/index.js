@@ -1,3 +1,5 @@
+import "./style.css"
+
 // DOM references
 const displayA = document.getElementById('main-display');
 const displayB = document.getElementById('up-display');
@@ -13,7 +15,7 @@ let opNum = 0;
 
 // Event listener for button clicks
 toDisplay.forEach((button) => {
-  button.addEventListener('click', () => {
+  button?.addEventListener('click', () => {
     let char = button.innerText;
     if(char === 'π') char = Math.PI;
 
@@ -53,7 +55,7 @@ toDisplay.forEach((button) => {
 });
 
 // Event listener for equals button click
-document.getElementById('equals').addEventListener('click', () => {
+document.getElementById('equals')?.addEventListener('click', () => {
   if (opNum === 1) {
     onDisplay = onDisplay.match(/(\d+|\.)/gi).join("");
     displayA.innerText = onDisplay;
@@ -62,19 +64,19 @@ document.getElementById('equals').addEventListener('click', () => {
 });
 
 // Event listeners for clear buttons
-document.getElementById('C').addEventListener('click', () => {
+document.getElementById('C')?.addEventListener('click', () => {
   onDisplay = onDisplay.slice(0, -1);
   currentDisplay.innerText = onDisplay;
 }); // backspace
 
-document.getElementById('AC').addEventListener('click', () => {
+document.getElementById('AC')?.addEventListener('click', () => {
   onDisplay = '';
   displayA.innerText = '';
   displayB.innerText = '';
 }); // clear all
 
 // Event listener for keyboard input
-document.addEventListener('keydown', (event) => {
+document?.addEventListener('keydown', (event) => {
   const key = event.key;
   handleKeyPress(key);
 });
@@ -156,3 +158,5 @@ function operate(input) {
 
   return ans;
 }
+
+export {operate}
