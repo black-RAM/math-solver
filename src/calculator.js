@@ -8,7 +8,15 @@ class Node {
 
 class CalculationTree {
   constructor(arithmetic) {
-    this.root = this.buildTree(this.splitOperations(arithmetic))
+    this.operatorTable = {
+      '+': (a, b) => a + b,
+      '-': (a, b) => a - b,
+      '*': (a, b) => a * b,
+      '/': (a, b) => a / b,
+      '^': (a, b) => Math.pow(a, b),
+    }
+    this.tree = this.buildTree(this.splitOperations(arithmetic))
+    this.answer = this.calculate()
   }
 
   splitOperations(arithmeticString) {
@@ -28,6 +36,15 @@ class CalculationTree {
     return root
   }
 
+  calculate(root = this.tree) { // post-order transversal
+    if(!/[-+*/^]/.test(root.data)) return Number(root.data)
+    const leftValue = this.calculate(root.left)
+    const rightValue = this.calculate(root.right)
+    const operator = this.operatorTable[root.data]
+    const value = operator(leftValue, rightValue)
+    return value
+  }
+
   getPrecedence(term) {
     if(["+", "-"].includes(term)) {
       return 1
@@ -41,18 +58,4 @@ class CalculationTree {
   }
 }
 
-function handleExceptions(input) {
-  return !(typeof input == "string" || input.split().every(char => /^\d|[-+*/^.]$/.test(char)))
-}
-
-function operate(expression) {
-  const exception = handleExceptions(expression)
-  if(exception) return "Math Error"
-
-  const tree = new CalculationTree("100/5*4^2-8*3+15")
-  console.log(tree.root)
-  
-  return Number(eval(expression))
-}
-
-export default operate
+export default CalculationTree

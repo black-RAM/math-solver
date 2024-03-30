@@ -1,4 +1,4 @@
-import operate from "./calculator"
+import Calculator from "./calculator"
 import "./style.css"
 
 let initializeInput = (inputHandler) => {
@@ -10,18 +10,19 @@ let initializeInput = (inputHandler) => {
 let updateView = (newState) => {
   const displayA = document.getElementById('main-display')
   const displayB = document.getElementById('up-display')
-  if(newState.answer) displayA.innerText = newState.answer
+  displayA.innerText = newState.answer
   displayB.innerText = newState.expression
 }
 
 const calculatorInterface = () => {
   const state = {
     expression: "",
-    answer: NaN
+    answer: ""
   }
 
   const calculate = () => {
-    state.answer = operate(state.expression)
+    const calculator = new Calculator(state.expression)
+    state.answer = String(calculator.answer)
   }
 
   const backSpace = () => {
@@ -42,12 +43,13 @@ const calculatorInterface = () => {
   }
  
   const reset = () => {
-    state.expression = String(state.answer)
-    state.answer = NaN
+    state.expression = state.answer
+    state.answer = ""
   }
 
   const handleDecimal = () => {
-    const lastNum = state.expression.match(/\d+(\.\d+)?/g).pop()
+    const numArray = state.expression.match(/\d+(\.\d+)?/g) || ["0"]
+    const lastNum = numArray.pop()
     const isInteger = /^\d+$/.test(lastNum)
     return isInteger ? "." : ""
   }
@@ -67,13 +69,13 @@ const calculatorInterface = () => {
  
   const handleInput = (key) => {
     if(Object.hasOwn(keyboardChar, key)) key = keyboardChar[key]
-    if(key == ".") key = handleDecimal()
     if(!validInput(key)) return
     
     if(Object.hasOwn(userCommands, key)) {
       userCommands[key]()
     } else {
-      if(state.answer && /[-+*/.=^]/.test(key)) reset()
+      if(state.answer) reset()
+      if(key == ".") key = handleDecimal()
       state.expression += key
     }
 
